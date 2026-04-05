@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — PhishGuard AI{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Header -->
+    <div class="dash-header">
+        <div>
+            <h1 class="dash-title">URL Scanner</h1>
+            <p class="dash-subtitle">Analyze URLs for phishing threats using AI</p>
+        </div>
+        <div class="dash-stats-mini">
+            <div class="stat-mini glass-card">
+                <span class="stat-mini-value" id="totalScans">{{ history|length }}</span>
+                <span class="stat-mini-label">Total Scans</span>
+            </div>
+            <div class="stat-mini glass-card">
+                <span class="stat-mini-value" id="threatsFound">{{ history|selectattr('prediction', 'equalto',
+                    'Phishing')|list|length }}</span>
+                <span class="stat-mini-label">Threats Found</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Panel -->
+    <div class="analysis-panel glass-card">
+        <div class="url-input-group">
+            <div class="input-wrapper input-wrapper-lg">
+                <span class="input-icon">🔗</span>
+                <input type="url" id="urlInput" placeholder="Enter a URL to analyze (e.g. https://example.com)"
+                    autocomplete="off">
+            </div>
+        </div>
+        <div class="model-selector">
+            <p class="model-label">Select AI Model:</p>
+            <div class="model-buttons">
+                <button class="model-btn model-btn-active" id="btnRoberta" data-model="roberta"
+                    onclick="selectModel('roberta')">
+                    <span class="model-icon">🤖</span>
+                    <span class="model-name">RoBERTa</span>
+                    <span class="model-desc">NLP Transformer</span>
+                </button>
+                <button class="model-btn" id="btnAutoencoder" data-model="autoencoder"
+                    onclick="selectModel('autoencoder')">
+                    <span class="model-icon">🧠</span>
+                    <span class="model-name">Auto Encoder</span>
+                    <span class="model-desc">Anomaly Detection</span>
+                </button>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-analyze" id="analyzeBtn" onclick="analyzeURL()">
+            <span class="btn-content">
+                <span class="btn-text">🔍 Analyze URL</span>
+                <span class="btn-loader" style="display:none;">
+                    <span class="spinner"></span>
+                    Analyzing...
+                </span>
+            </span>
+        </button>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="result-panel" id="resultPanel" style="display:none;">
+        <div class="result-card glass-card" id="resultCard">
+            <!-- Header -->
+            <div class="result-header" id="resultHeader">
+                <div class="result-verdict">
+                    <span class="result-icon" id="resultIcon">🔍</span>
+                    <div>
+                        <h2 class="result-prediction" id="resultPrediction">—</h2>
+                        <p class="result-model" id="resultModel">—</p>
+                    </div>
+                </div>
+                <div class="result-confidence-ring" id="confidenceRing">
+                    <svg viewBox="0 0 120 120" class="confidence-svg">
+                        <circle cx="60" cy="60" r="52" class="confidence-bg"></circle>
+                        <circle cx="60" cy="60" r="52" class="confidence-fill" id="confidenceFill"></circle>
+                    </svg>
+                    <div class="confidence-value">
+                        <span class="confidence-number" id="confidenceNumber">0</span>
+                        <span class="confidence-percent">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analyzed URL -->
+            <div class="result-url" id="resultUrl">
+                <span class="result-url-label">Analyzed URL:</span>
+                <span class="result-url-value" id="resultUrlValue">—</span>
+            </div>
+
+            <!-- Risk Score Bar -->
+            <div class="risk-bar-container">
+                <div class="risk-bar-header">
+                    <span>Risk Score</span>
+                    <span id="riskScoreLabel">0%</span>
+                </div>
+                <div class="risk-bar">
+                    <div class="risk-bar-fill" id="riskBarFill" style="width: 0%"></div>
+                </div>
+                <div class="risk-bar-labels">
+                    <span>Safe</span>
+                    <span>Suspicious</span>
+                    <span>Dangerous</span>
+                </div>
+            </div>
+
+            <!-- Feature Analysis -->
+            <div class="features-panel">
+                <h3 class="features-title">📊 Detailed Analysis</h3>
+                <div class="features-grid" id="featuresGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Panel -->
+    <div class="history-panel">
+        <div class="history-header">
+            <h3>📜 Recent Scans</h3>
+            {% if history %}
+            <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Clear History</button>
+            {% endif %}
+        </div>
+        <div class="history-list" id="historyList">
+            {% if history %}
+            {% for item in history %}
+            <div class="history-item glass-card" onclick="analyzeFromHistory('{{ item.url }}', '{{ item.model }}')">
+                <div class="history-item-main">
+                    <span
+                        class="history-icon {% if item.prediction == 'Phishing' %}history-danger{% else %}history-safe{% endif %}">
+                        {% if item.prediction == 'Phishing' %}🚨{% else %}✅{% endif %}
+                    </span>
+                    <div class="history-details">
+                        <span class="history-url">{{ item.url[:60] }}{% if item.url|length > 60 %}...{% endif %}</span>
+                        <span class="history-meta">{{ item.model }} · {{ item.prediction }} · {{ (item.confidence *
+                            100)|round(1) }}%</span>
+                    </div>
+                </div>
+                <span class="history-time">{{ item.analyzed_at }}</span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="history-empty">
+                <span class="history-empty-icon">🔍</span>
+                <p>No scans yet. Analyze your first URL above!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

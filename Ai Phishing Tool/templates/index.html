@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}PhishGuard AI — AI-Powered Phishing Detection{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">🔒 AI-Powered Security</div>
+        <h1 class="hero-title">
+            Detect <span class="gradient-text">Phishing URLs</span>
+            <br>In Real-Time
+        </h1>
+        <p class="hero-subtitle">
+            Protect yourself from malicious URLs using our advanced AI models.
+            Powered by RoBERTa NLP and Auto Encoder anomaly detection.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                <span>Get Started Free</span>
+                <span class="btn-arrow">→</span>
+            </a>
+            <a href="{{ url_for('login') }}" class="btn btn-ghost btn-lg">
+                Login
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-value">99.2%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">&lt;100ms</span>
+                <span class="stat-label">Response Time</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">2</span>
+                <span class="stat-label">AI Models</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-card glass-card">
+            <div class="scan-demo">
+                <div class="scan-url">
+                    <span class="scan-protocol scan-danger">http://</span>
+                    <span class="scan-text">192.168.1.1/paypal-login/secure</span>
+                </div>
+                <div class="scan-result scan-result-danger">
+                    <span class="scan-icon">🚨</span>
+                    <span>PHISHING DETECTED</span>
+                    <span class="scan-confidence">97.3% confidence</span>
+                </div>
+            </div>
+            <div class="scan-demo" style="margin-top: 1rem;">
+                <div class="scan-url">
+                    <span class="scan-protocol scan-safe">https://</span>
+                    <span class="scan-text">www.google.com</span>
+                </div>
+                <div class="scan-result scan-result-safe">
+                    <span class="scan-icon">✅</span>
+                    <span>LEGITIMATE</span>
+                    <span class="scan-confidence">99.1% confidence</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features section -->
+<section class="features">
+    <h2 class="section-title">Two Powerful <span class="gradient-text">AI Models</span></h2>
+    <div class="features-grid">
+        <div class="feature-card glass-card">
+            <div class="feature-icon">🤖</div>
+            <h3>RoBERTa Model</h3>
+            <p>NLP-based transformer model that analyzes semantic patterns, suspicious keywords, and brand impersonation
+                attempts in URLs.</p>
+            <ul class="feature-list">
+                <li>Semantic URL analysis</li>
+                <li>Brand impersonation detection</li>
+                <li>Keyword pattern matching</li>
+            </ul>
+        </div>
+        <div class="feature-card glass-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Auto Encoder Model</h3>
+            <p>Anomaly detection model that identifies structural deviations from legitimate URL patterns using
+                reconstruction error analysis.</p>
+            <ul class="feature-list">
+                <li>Structural anomaly detection</li>
+                <li>Entropy analysis</li>
+                <li>Reconstruction error scoring</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

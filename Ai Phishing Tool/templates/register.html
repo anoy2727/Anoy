@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Create Account — PhishGuard AI{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card glass-card">
+        <div class="auth-header">
+            <span class="auth-icon">🚀</span>
+            <h2>Create Account</h2>
+            <p>Join PhishGuard AI and start detecting threats</p>
+        </div>
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form" id="registerForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined else '' }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required
+                        minlength="3" autocomplete="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📧</span>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required
+                        autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔑</span>
+                    <input type="password" id="password" name="password" placeholder="At least 6 characters" required
+                        minlength="6" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="confirm_password" name="confirm_password"
+                        placeholder="Confirm your password" required minlength="6" autocomplete="new-password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="registerBtn">
+                <span>Create Account</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </form>
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
