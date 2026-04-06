@@ -16,8 +16,8 @@ from models import PhishingDetector
 
 # ─── App Configuration ───────────────────────────────────────────────
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24).hex()
-app.config['DATABASE'] = os.path.join(app.root_path, 'phishing_detector.db')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
+app.config['DATABASE'] = '/tmp/phishing_detector.db'
 
 detector = PhishingDetector()
 
